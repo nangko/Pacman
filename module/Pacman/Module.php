@@ -9,8 +9,8 @@
 
 namespace Pacman;
 
-use Pacman\Model\Project\Project;
 use Pacman\Model\Project\ProjectTable;
+use Pacman\Model\Category\CategoryTable;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\ModuleManager;
@@ -79,17 +79,24 @@ class Module
         return array(
             'factories' => array(
                 'Pacman\Model\Project\ProjectTable' => function($sm) {
-                    $tableGateway = $sm->get('ProjectTableGateway');
+                    $tableGateway = Module::getTableGateway($sm, 'project', 'Pacman\Model\Project\Project');
                     $table = new ProjectTable($tableGateway);
                     return $table;
                 },
-                'ProjectTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Project());
-                    return new TableGateway('project', $dbAdapter, null, $resultSetPrototype);
-                },
+                'Pacman\Model\Category\CategoryTable' => function($sm) {
+                    $tableGateway = Module::getTableGateway($sm, 'category', 'Pacman\Model\Category\Category');
+                    $table = new CategoryTable($tableGateway);
+                    return $table;
+                }
             ),
         );
+    }
+
+    static public function getTableGateway($sm, $tableName, $entityName)
+    {
+        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+        $resultSetPrototype = new ResultSet();
+        $resultSetPrototype->setArrayObjectPrototype(new $entityName());
+        return new TableGateway($tableName, $dbAdapter, null, $resultSetPrototype);
     }
 }
