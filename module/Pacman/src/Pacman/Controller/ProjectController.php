@@ -8,13 +8,34 @@
 
 namespace Pacman\Controller;
 
-use Pacman\Model\Project\ProjectTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class ProjectController extends AbstractActionController
 {
+    /**
+     * Project TableGateway
+     * @var Pacman\Model\Project\ProjectTable
+     */
     protected $projectTable;
+
+    /**
+     * Password TableGateway
+     * @var Pacman\Model\Password\PasswordTable
+     */
+    protected $passwordTable;
+
+    /**
+     * Category TableGateway
+     * @var Pacman\Model\Category\CategoryTable
+     */
+    protected $categoryTable;
+
+    /**
+     * Environment TableGateway
+     * @var Pacman\Model\Environment\EnvironmentTable
+     */
+    protected $environmentTable;
 
     /**
      * list of projects
@@ -42,20 +63,65 @@ class ProjectController extends AbstractActionController
 
         return new ViewModel(array(
             'project' => $project,
+            'categories' => $this->getCategoryTable()->fetchByProject($project->id),
+            'passwordTable' => $this->getPasswordTable(),
+            'environmentTable' => $this->getEnvironmentTable(),
         ));
     }
 
     /**
      * get Project TableGateway
      *
-     * @return ProjectTable
+     * @return Pacman\Model\Project\ProjectTable
      */
-    public function getProjectTable()
+    protected function getProjectTable()
     {
         if (!$this->projectTable) {
             $sm = $this->getServiceLocator();
             $this->projectTable = $sm->get('Pacman\Model\Project\ProjectTable');
         }
         return $this->projectTable;
+    }
+
+    /**
+     * get Password TableGateway
+     *
+     * @return Pacman\Model\Password\PasswordTable
+     */
+    protected function getPasswordTable()
+    {
+        if (!$this->passwordTable) {
+            $sm = $this->getServiceLocator();
+            $this->passwordTable = $sm->get('Pacman\Model\Password\PasswordTable');
+        }
+        return $this->passwordTable;
+    }
+
+    /**
+     * get Category TableGateway
+     *
+     * @return Pacman\Model\Category\CategoryTable
+     */
+    protected function getCategoryTable()
+    {
+        if (!$this->categoryTable) {
+            $sm = $this->getServiceLocator();
+            $this->categoryTable = $sm->get('Pacman\Model\Category\CategoryTable');
+        }
+        return $this->categoryTable;
+    }
+
+    /**
+     * get Environment TableGateway
+     *
+     * @return Pacman\Model\Environment\EnvironmentTable
+     */
+    protected function getEnvironmentTable()
+    {
+        if (!$this->environmentTable) {
+            $sm = $this->getServiceLocator();
+            $this->environmentTable = $sm->get('Pacman\Model\Environment\EnvironmentTable');
+        }
+        return $this->environmentTable;
     }
 }
