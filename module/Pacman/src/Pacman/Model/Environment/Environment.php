@@ -31,4 +31,13 @@ class Environment
         $this->id = (isset($data['id'])) ? $data['id'] : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;
     }
+
+    /**
+     * get entity as Array
+     * @return array
+     */
+    public function toArray()
+    {
+        return array('id' => $this->id, 'name' => $this->name);
+    }
 }

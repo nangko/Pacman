@@ -11,6 +11,7 @@ namespace Pacman;
 
 use Pacman\Model\Project\ProjectTable;
 use Pacman\Model\Category\CategoryTable;
+use Pacman\Model\Password\PasswordTable;
 use Pacman\Model\Environment\EnvironmentTable;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -92,6 +93,11 @@ class Module
                 'Pacman\Model\Environment\EnvironmentTable' => function($sm) {
                     $tableGateway = Module::getTableGateway($sm, 'environment', 'Pacman\Model\Environment\Environment');
                     $table = new EnvironmentTable($tableGateway);
+                    return $table;
+                },
+                'Pacman\Model\Password\PasswordTable' => function($sm) {
+                    $tableGateway = Module::getTableGateway($sm, 'password', 'Pacman\Model\Password\Password');
+                    $table = new PasswordTable($tableGateway);
                     return $table;
                 },
             ),

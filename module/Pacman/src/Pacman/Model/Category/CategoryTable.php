@@ -15,7 +15,7 @@ class CategoryTable
 {
     /**
      * Table gateway
-     * @var TableGateway
+     * @var Zend\Db\TableGateway\TableGateway
      */
     protected $tableGateway;
 
@@ -53,5 +53,24 @@ class CategoryTable
         }
 
         return $row;
+    }
+
+    /*
+     * fetch categories by project
+     *
+     * @param int $projectId
+     * @return ResultSet
+     */
+    public function fetchByProject($projectId)
+    {
+        $projectId = (int) $projectId;
+        $select = $this->tableGateway->getSql()->select()
+            ->join('password', "category.id = password.category_id",array())
+            ->where("password.project_id = $projectId")
+            ->group("id")
+            ->order('name ASC');
+
+        $resultSet = $this->tableGateway->selectWith($select);
+        return $resultSet;
     }
 }

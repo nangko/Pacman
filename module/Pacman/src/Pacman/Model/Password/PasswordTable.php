@@ -6,16 +6,18 @@
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Pacman\Model\Environment;
+namespace Pacman\Model\Password;
 
-use Pacman\Model\Environment\Environment;
+use Zend\Db\Sql\Select;
+
+use Pacman\Model\Password\Password;
 use Zend\Db\TableGateway\TableGateway;
 
-class EnvironmentTable
+class PasswordTable
 {
     /**
      * Table gateway
-     * @var TableGateway
+     * @var Zend\Db\TableGateway\TableGateway
      */
     protected $tableGateway;
 
@@ -36,12 +38,12 @@ class EnvironmentTable
     }
 
     /**
-     * Find environment by id
+     * Find password by id
      *
      * @param int $id
      * @return Entity
      */
-    public function findEnvironment($id)
+    public function findPassword($id)
     {
         $id  = (int) $id;
         $rowset = $this->tableGateway->select(array(
@@ -49,27 +51,27 @@ class EnvironmentTable
         ));
         $row = $rowset->current();
         if (!$row) {
-            throw new \Exception("Could not find environment with ID $id");
+            throw new \Exception("Could not find password with ID $id");
         }
 
         return $row;
     }
 
     /**
-     * Fetch Environments by password
+     * Fetch passwords by Project and Category
      *
-     * @param int $passwordId
-     * @return Entity
+     * @param int $projectId
+     * @param int $categoryId
+     * @return ResultSet
      */
-    public function fetchByPassword($passwordId)
+    public function fetchByProjectAndCategory($projectId,$categoryId)
     {
-        $passwordId = (int) $passwordId;
-        $select = $this->tableGateway->getSql()->select()
-            ->join('password_environment', "environment.id = password_environment.environment_id",array())
-            ->where("password_environment.password_id = $passwordId")
-            ->order('name ASC');
+        $projectId = (int) $projectId;
+        $categoryId = (int) $categoryId;
 
-        $resultSet = $this->tableGateway->selectWith($select);
-        return $resultSet;
+        return $this->tableGateway->select(array(
+                'project_id' => $projectId,
+                'category_id' => $categoryId,
+            ));
     }
 }
