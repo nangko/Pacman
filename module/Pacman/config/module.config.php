@@ -9,11 +9,6 @@
 
 
 return array(
-        'controller_plugins' => array(
-                'invokables' => array(
-                        'acceptantViewModelSelector' => 'Pacman\Mvc\Controller\Plugin\AcceptantViewModelSelector',
-                        )
-                        ),
 
     'router' => array(
         'routes' => array(
@@ -24,6 +19,62 @@ return array(
                     'defaults' => array(
                         'controller' => 'Pacman\Controller\Index',
                         'action'     => 'index',
+                    ),
+                ),
+            ),
+            'project' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/project[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Pacman\Controller\Project',
+                        'action'     => 'list',
+                    ),
+                ),
+            ),
+            'category' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/category[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Pacman\Controller\Category',
+                        'action'     => 'list',
+                    ),
+                ),
+            ),
+            'environment' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/environment[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Pacman\Controller\Environment',
+                        'action'     => 'list',
+                    ),
+                ),
+            ),
+            'customer' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/customer[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Pacman\Controller\Customer',
+                        'action'     => 'list',
                     ),
                 ),
             ),
@@ -62,6 +113,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
     ),
     'translator' => array(
@@ -76,7 +128,11 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Pacman\Controller\Index' => 'Pacman\Controller\IndexController'
+            'Pacman\Controller\Index' => 'Pacman\Controller\IndexController',
+            'Pacman\Controller\Project' => 'Pacman\Controller\ProjectController',
+            'Pacman\Controller\Category' => 'Pacman\Controller\CategoryController',
+            'Pacman\Controller\Environment' => 'Pacman\Controller\EnvironmentController',
+            'Pacman\Controller\Customer' => 'Pacman\Controller\CustomerController',
         ),
     ),
     'view_manager' => array(
